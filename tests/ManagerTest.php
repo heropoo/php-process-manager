@@ -6,43 +6,39 @@
 
 namespace Moon\Tests;
 
-use Moon\Manager;
-use Moon\Process;
+use Moon\ProcessManager;
 use PHPUnit\Framework\TestCase;
 
 class ManagerTest extends TestCase
 {
     protected $config = [
         [
-            'command' => 'php tests/commands/hello.php',
+            'command' => 'hello.php',
             'interval_time' => 3, // Run every three seconds
         ],
         [
-            'command' => 'php tests/commands/while.php',
+            'command' => 'while.php',
             'interval_time' => 10,
         ]
     ];
+    protected $prefix = 'php tests/commands/';
+    protected $monitor = 'monitor.php';
 
     public function testStartProcess()
     {
-        $this->assertInstanceOf(Manager::class, $this->config);
-        $manager = new Manager($this->config);
+        $manager = new ProcessManager($this->monitor, $this->config, $this->prefix);
+        $manager->manageProcess('start');
 
     }
 
-    public function testWhileProcessInfo()
+    public function testProcessStatus()
     {
-        Process::getInfo('php tests/commands/hello.php');
+        $manager = new ProcessManager($this->monitor, $this->config, $this->prefix);
+        $manager->workProcessStatus();
     }
-//
-//    public function testProcessList()
-//    {
-//
-//    }
 //
 //    public function testGetPid()
 //    {
-//
 //    }
 //
 //    public function testKillPid()
